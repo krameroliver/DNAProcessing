@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-deployment
+  labels:
+    app: pythonAgendDNA
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pythonAgendDNA
+  template:
+    metadata:
+      labels:
+        app: pythonAgendDNA
+    spec:
+      containers:
+      - name: pythonagend
+        image: okramer170487/privatdockerhub:pythonagend
+        command: ["python /python/GenomInfo.py"]

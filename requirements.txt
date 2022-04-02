@@ -1,0 +1,16 @@
+biopython
+pika
+rabbitmq-tool
+amqp_client_cli
+pandas
+pymongo
+sqlAlchemy
+pymysql
+sqlalchemy_access
+requests
+BeautifulSoup4
+xmltodict
+split-fasta
+pyYaml
+mysql-connector-python
+scikit-learn
