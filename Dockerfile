@@ -6,4 +6,4 @@ RUN pip install mysql-connector-python
 
 COPY . /tmp/
 
-ENTRYPOINT ["python3", "/tmp/GenomInfo.py"]
+#ENTRYPOINT ["python3", "/tmp/GenomInfo.py"]

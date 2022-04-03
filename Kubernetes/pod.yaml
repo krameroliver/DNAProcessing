@@ -1,0 +1,20 @@
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pythonagend
+spec:
+  containers:
+    #- command:
+    #    - python3
+    #    - "/tmp/GenomInfo.py"
+    - image: ubuntu
+      name: pythonagend
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "250m"
+        limits:
+          memory: "128Mi"
+          cpu: "500m"
+  restartPolicy: Always

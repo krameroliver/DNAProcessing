@@ -15,7 +15,8 @@ spec:
         app: pythonAgendDNA
     spec:
       containers:
-      - name: ubuntu
-        image: ubuntu
-        command: ['sh', '-c', 'echo The Pod is running && sleep 6']
-
+      - name: pythonagend
+        image: okramer170487/privatdockerhub:pythonagend
+        #command: ['python3', '/tmp/GenomInfo.py']
+        imagePullPolicy: Always
+      restartPolicy: Always
