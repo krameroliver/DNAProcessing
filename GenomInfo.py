@@ -7,11 +7,11 @@ from Bio.SeqUtils import GC
 from joblib import Parallel, delayed
 from multiprocessing import cpu_count
 
-from utils.dbConnecion import buildConnection, sqlaConnection, insert_in_table
+from dbConnecion import buildConnection, sqlaConnection
 
 
-def getEntrys(limit, offset):
-    QUERY = f"select ID from Research.genoms LIMIT {limit},{offset};"
+def getEntrys():
+    QUERY = f"select ID from Research.genoms;"
     print(QUERY)
     cnx, cur = buildConnection()
     logging.info("Execute Select")
@@ -25,27 +25,29 @@ def getEntrys(limit, offset):
 
 
 def procedEntry(id):
-    query = f"select ID, Sequence,organism,sequencing_date from Research.genoms where ID '{id}');"
-    data = pd.read_sql_query(sql=query,con=sqlaConnection())
-    data['GC_Content'] = data['Sequence'].apply(lambda x : GC(Seq(x)))
-    data['AT_Content'] = data['Sequence'].apply(lambda x:  100 - GC(Seq(x)))
-    data = data[['ID','GC_Content','AT_Content','organism','sequencing_date']]
-    data.to_sql(name="genom_info",if_exists='append',schema='Research',con=sqlaConnection(),index=False)
+    query = f"select ID, Sequence,organism,sequencing_date from Research.genoms where ID = '{id}';"
+    cnx, cur = buildConnection()
+    cur.execute(query)
+    data = cur.fetchall()[0]
+    gcc = GC(Seq(data[1]))
+    atc = 100 - gcc
+    sql = f"INSERT INTO Research.genom_info(ID, GC_Content, AT_Content, sequencing_date, organism)VALUES('{id}', {gcc}, {atc}, '{data[3]}', '{data[2]}');commit;"
 
+    try:
+        cur.execute(sql)
+    except:
+        pass
 
 
 
 def main():
-    LIMIT = 1000
-    ncpu = cpu_count()-1
     cnx, cur = buildConnection()
     cur.execute("TRUNCATE TABLE Research.genom_info;")
     cur.execute(f"select count(ID) from Research.genoms;")
     all = cur.fetchall()[0][0]
-    runs = ceil(all / LIMIT)
-    for run in range(runs):
-        ids = getEntrys(LIMIT, run * LIMIT)
-        Parallel(n_jobs=ncpu)(delayed(procedEntry)(i) for i in range(ids))
+    ids = getEntrys()
+    for i in ids:
+        procedEntry(i)
 
 
 

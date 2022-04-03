@@ -7,7 +7,7 @@ import sqlalchemy
 from Bio import SeqIO
 from mysql.connector import MySQLConnection
 
-import utils.parsePropertys as pp
+import parsePropertys as pp
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import fnmatch
