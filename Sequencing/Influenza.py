@@ -5,6 +5,9 @@ from datetime import date
 from Bio import SeqIO
 from mysql.connector import MySQLConnection
 
+from Sequencing import Transcription, Translation
+from utils.dbConnecion import buildConnection
+
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import fnmatch
 
@@ -24,10 +27,7 @@ def get_updates(opath: str):
 
 def insert(to_insert: int):
     data = []
-
-    cnx = MySQLConnection(user='Oliver', database='Research', password='KhBHg80C1987.',
-                          host='clusterkramer.ddns.net',
-                          autocommit=True)
+    cnx, cur = buildConnection()
     cur = cnx.cursor(buffered=True)
     cur.execute('SET GLOBAL max_allowed_packet=6710886400')
 
@@ -40,7 +40,28 @@ def insert(to_insert: int):
         fasta = SeqIO.parse(open(variant_path, 'r'), "fasta")
         print(f"{species}:{variant}")
         for k, record in enumerate(fasta):
-
+            Transcription.procedEntry({
+                "id": f'{record.id}',
+                "sequence": f'{record.seq}',
+                "organism": f'{organism}',
+                "sequencing_date": f'{date.today()}',
+                "variant": f'{variant}',
+                "host_organism": f'HUMAN',
+                "organism_type": "",
+                "organism_sub_type": "",
+                "species": f'{species}'
+            })
+            Translation.procedEntry({
+                "id": f'{record.id}',
+                "sequence": f'{record.seq}',
+                "organism": f'{organism}',
+                "sequencing_date": f'{date.today()}',
+                "variant": f'{variant}',
+                "host_organism": f'HUMAN',
+                "organism_type": "",
+                "organism_sub_type": "",
+                "species": f'{species}'
+            })
             data.append((
                 f'{record.id}',
                 f'{record.seq}',

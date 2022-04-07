@@ -3,11 +3,12 @@ import warnings
 from datetime import date
 
 import pandas as pd
-import sqlalchemy
 from Bio import SeqIO
-from mysql.connector import MySQLConnection
 
+import Sequencing.Transcription as Transcription
+import Sequencing.Translation as Translation
 import parsePropertys as pp
+from utils.dbConnecion import buildConnection, sqlaConnection
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import fnmatch
@@ -41,11 +42,7 @@ def organismtype(otype: str = "Virus"):
 
 def insert(to_insert: int):
     data = []
-
-    cnx = MySQLConnection(user='Oliver', database='Research', password='KhBHg80C1987.',
-                          host='clusterkramer.ddns.net',
-                          autocommit=True)
-    cur = cnx.cursor(buffered=True)
+    cnx, cur = buildConnection()
     cur.execute('SET GLOBAL max_allowed_packet=6710886400')
 
     for f in organismtype():
@@ -55,6 +52,29 @@ def insert(to_insert: int):
         print(f"{infos['organism']}:{infos['species']}:{infos['variant']}")
 
         for k, record in enumerate(fasta):
+            Transcription.procedEntry( {
+                    "id": f'{record.id}',
+                    "sequence": f'{record.seq}',
+                    "organism": f'{infos["organism"]}',
+                    "sequencing_date": f'{date.today()}',
+                    "variant": f'{infos["variant"]}',
+                    "host_organism": f'HUMAN',
+                    "organism_type": f'{infos["organism_type"]}',
+                    "organism_sub_type": f'{infos["organism_sub_type"]}',
+                    "species": f'{infos["species"]}'
+                } )
+            Translation.procedEntry({
+                "id": f'{record.id}',
+                "sequence": f'{record.seq}',
+                "organism": f'{infos["organism"]}',
+                "sequencing_date": f'{date.today()}',
+                "variant": f'{infos["variant"]}',
+                "host_organism": f'HUMAN',
+                "organism_type": f'{infos["organism_type"]}',
+                "organism_sub_type": f'{infos["organism_sub_type"]}',
+                "species": f'{infos["species"]}'
+            })
+
             data.append((
                 f'{record.id}',
                 f'{record.seq}',
@@ -81,8 +101,7 @@ def insert_many(data, cur):
 
 
 def count_table(TABLE, variant: str, org_type: str):
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://Oliver:KhBHg80C1987.@clusterkramer.ddns.net:3306/Research'
-    engine = sqlalchemy.create_engine(SQLALCHEMY_DATABASE_URI, echo=True)
+    engine = sqlaConnection(db="server")
     sql = f"select count(*) as c from Research.{TABLE} where variant='{variant}' and organism_type='{org_type}';"
     counter = pd.read_sql(sql=sql, con=engine)
     print("Entrys: " + str(counter.loc[0, 'c']))

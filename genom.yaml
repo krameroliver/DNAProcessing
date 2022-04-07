@@ -1,2 +1,14 @@
 file:
   sourcefolder: "E:\\Data"
+nas:
+  user: "oliver"
+  pw: "KhBHg80C1987."
+  host: 'clusterkramer.ddns.net'
+  port: 3306
+
+server:
+  user: "oliver"
+  pw: "KhBHg80C1987."
+  host: 'oliver-TERRA-Server'
+  port: 3306
+

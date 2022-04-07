@@ -1,13 +1,9 @@
 import logging
-from math import ceil
 
-import pandas as pd
 from Bio.Seq import Seq
 from Bio.SeqUtils import GC
-from joblib import Parallel, delayed
-from multiprocessing import cpu_count
 
-from dbConnecion import buildConnection, sqlaConnection
+from utils.dbConnecion import buildConnection
 
 
 def getEntrys():

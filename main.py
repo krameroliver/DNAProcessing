@@ -1,5 +1,13 @@
-from Influenza import insert
+import threading
+
+from Sequencing.Influenza import insert as influenza
+from Sequencing.SARS import insert as sars
 
 if __name__ == '__main__':
-    insert(to_insert=1)
-
+    inserts = 10000
+    sars_t = threading.Thread(target=sars, args=(inserts,))
+    influenza_t = threading.Thread(target=influenza, args=(inserts,))
+    sars_t.start()
+    influenza_t.start()
+    sars_t.join()
+    influenza_t.join()

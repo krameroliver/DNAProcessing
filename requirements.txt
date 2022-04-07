@@ -14,3 +14,5 @@ split-fasta
 pyYaml
 mysql-connector-python
 scikit-learn
+Levenshtein
+matplotlib
