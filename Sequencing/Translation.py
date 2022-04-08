@@ -1,24 +1,20 @@
-import logging
+from typing import Dict
 
-import pandas as pd
 from Bio.Seq import Seq
 
-from utils.dbConnecion import buildConnection, sqlaConnection
 
-def procedEntry(info):
-    print("Proceed RNA")
-    sequence = info['sequence']
-    tr = sequence.transcribe()
-    id = info['id']
-    organism = info['organism']
-    sequencing_date = info['sequencing_date']
-    variant = info['variant']
-    prot = sequence.translation().upper()
-    d = [[id, organism, f"{sequencing_date}", variant, f"{prot}"]]
-    data = pd.DataFrame(d, columns=['id', 'organism', 'seq_date', 'variant', 'ssmRNA'])
+def insert(data: Dict, cnx, cur):
+    data_neu = {"id": data["id"],
+                "sequence": Seq(data["sequence"]).translate().upper(),
+                "organism_type": data["organism_type"],
+                "organism": data["organism"],
+                "spezies": data["spezies"],
+                "subspezies": data["subspezies"]}
+    stmt = f"INSERT INTO Research.protein(id, sequence, organism_type, organism, spezies, subspezies) " \
+           f"VALUES(%s,%s,%s,%s,%s, %s);"
     try:
-        data.to_sql(index=False, if_exists='append', schema='Research', con=sqlaConnection(db='server'), name='protein')
+        cur.execute(stmt, data_neu)
+        cnx.commit()
+        cnx.reconnect()
     except:
         pass
-
-

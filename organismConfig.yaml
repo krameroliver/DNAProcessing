@@ -1,0 +1,38 @@
+Virus:
+  SARS:
+    MERS:
+      wildtype: "genomic.fna"
+    SARS-CoV-2:
+      Alpha: "genomic.fna"
+      Beta: "genomic.fna"
+      Delta: "genomic.fna"
+  Influenza:
+    wildtype:
+      2020-09-13: "influenza.fna"
+      2020-09-14: "influenza.fna"
+      2020-09-15: "influenza.fna"
+      2020-09-16: "influenza.fna"
+      2020-09-17: "influenza.fna"
+      2020-09-18: "influenza.fna"
+      2020-09-19: "influenza.fna"
+      2020-09-20: "influenza.fna"
+      2020-09-21: "influenza.fna"
+      2020-09-22: "influenza.fna"
+      2020-09-23: "influenza.fna"
+      2020-09-24: "influenza.fna"
+      2020-09-25: "influenza.fna"
+      2020-09-26: "influenza.fna"
+      2020-09-27: "influenza.fna"
+      2020-09-28: "influenza.fna"
+      2020-09-29: "influenza.fna"
+      2020-09-30: "influenza.fna"
+      2020-10-01: "influenza.fna"
+      2020-10-02: "influenza.fna"
+      2020-10-03: "influenza.fna"
+      2020-10-04: "influenza.fna"
+      2020-10-05: "influenza.fna"
+      2020-10-06: "influenza.fna"
+      2020-10-07: "influenza.fna"
+      2020-10-09: "influenza.fna"
+      2020-10-13: "influenza.fna"
+

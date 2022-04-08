@@ -31,7 +31,7 @@ def get_type_infos(path: str):
 
 def organismtype(otype: str = "Virus"):
     root = pp.getFileSource()
-    opath = os.path.join(root, otype)
+    opath = os.path.join(os.path.join(root, otype), "SARS")
 
     organismtypes = []
 
@@ -42,15 +42,15 @@ def organismtype(otype: str = "Virus"):
 
 def insert(to_insert: int):
     data = []
-    cnx, cur = buildConnection()
+    cnx, cur = buildConnection(db="server")
     cur.execute('SET GLOBAL max_allowed_packet=6710886400')
-
+    print(organismtype()[1])
     for f in organismtype():
         FPATH = f[0]
         infos = f[1]
         fasta = SeqIO.parse(open(FPATH, 'r'), "fasta")
         print(f"{infos['organism']}:{infos['species']}:{infos['variant']}")
-
+        print(infos)
         for k, record in enumerate(fasta):
             Transcription.procedEntry( {
                     "id": f'{record.id}',

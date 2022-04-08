@@ -27,14 +27,14 @@ def get_updates(opath: str):
 
 def insert(to_insert: int):
     data = []
-    cnx, cur = buildConnection()
+    cnx, cur = buildConnection(db="server")
     cur = cnx.cursor(buffered=True)
     cur.execute('SET GLOBAL max_allowed_packet=6710886400')
 
     update_versions = get_updates(OPath)
     print(update_versions)
     for variant_path in update_versions:
-        variant = variant_path.split('\\')[5]
+        variant = ""
         organism = variant_path.split('\\')[3]
         species = "Virus"
         fasta = SeqIO.parse(open(variant_path, 'r'), "fasta")
