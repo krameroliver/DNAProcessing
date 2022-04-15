@@ -1,4 +1,5 @@
-  apt-get update && apt install -y python3-pip &&
+  apt-get update;
+  apt install -y python3-pip;
   pip3 install biopython &
   pip3 install pika &
   pip3 install pandas &
